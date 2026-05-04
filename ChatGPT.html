@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ChatGPT Mobile</title>
+    <script src="https://puter.com"></script>
+    <script src="https://tailwindcss.com"></script>
+    <style>
+        body { background-color: #000; color: #fff; font-family: -apple-system, system-ui, sans-serif; overflow: hidden; }
+        .plus-pill { background: #2f2f2f; border-radius: 20px; padding: 6px 14px; font-size: 14px; font-weight: 600; color: #d1d1d1; }
+        .card-container { display: flex; gap: 12px; overflow-x: auto; padding: 20px 40px; scroll-snap-type: x mandatory; }
+        .card-container::-webkit-scrollbar { display: none; }
+        .card { width: 140px; height: 140px; border-radius: 18px; flex-shrink: 0; background-size: cover; scroll-snap-align: center; }
+        .bottom-pill { background: #171717; border-radius: 35px; height: 56px; margin: 16px; padding: 0 16px; border: 1px solid #262626; position: fixed; bottom: 10px; left: 16px; right: 16px; }
+        .voice-circle { width: 32px; height: 32px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    </style>
+</head>
+<body class="flex flex-col h-screen">
+
+    <!-- Top Bar -->
+    <div class="flex items-center justify-between p-4 pt-6">
+        <div class="p-2"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg></div>
+        <div class="plus-pill">✨ Get Plus</div>
+        <div class="flex gap-3">
+            <div class="p-2"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/></svg></div>
+            <div class="p-2"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        </div>
+    </div>
+
+    <!-- Image Creation Center -->
+    <div class="flex-1 flex flex-col items-center justify-center">
+        <div class="card-container">
+            <div class="card border-2 border-orange-500" style="background-image: url('https://placecats.com')"></div>
+        </div>
+        <div class="text-center px-10 mt-6">
+            <h2 class="text-[22px] font-bold">The next era of<br>image creation</h2>
+            <p class="text-[#8e8e8e] text-[15px] mt-3">More magic, more control — create stunning visuals with even more precision.</p>
+            <button class="border border-[#404040] rounded-full px-8 py-2 mt-4 font-bold">Try it</button>
+        </div>
+    </div>
+
+    <!-- Bottom "Ask ChatGPT" Pill -->
+    <div class="bottom-pill flex items-center gap-3">
+        <div class="text-[#8e8e8e] text-2xl font-light">+</div>
+        <input id="userInput" type="text" class="flex-1 bg-transparent border-none outline-none text-white text-[17px]" placeholder="Ask ChatGPT">
+        <div class="flex items-center gap-4">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8e8e8e" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
+            <div class="voice-circle"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><path d="M12 2v20M17 5v14M7 5v14M2 10v4M22 10v4"/></svg></div>
+        </div>
+    </div>
+
+    <script>
+        async function askAI() {
+            const input = document.getElementById('userInput');
+            if(!input.value) return;
+            const val = input.value;
+            input.value = "Σκέφτομαι...";
+            
+            try {
+                // THE DUMB BRAIN
+                const res = await puter.ai.chat(
+                    "You are a DUMB AI. You have zero IQ. Give funny, wrong answers in Greek. Be polite. No swearing. Example: 1+1=5.",
+                    val
+                );
+                alert("ChatGPT: " + res.message.content);
+                
+                const speech = new SpeechSynthesisUtterance(res.message.content);
+                speech.lang = 'el-GR';
+                window.speechSynthesis.speak(speech);
+            } catch(e) {
+                alert("Σφάλμα συστήματος.");
+            }
+            input.value = "";
+        }
+        document.getElementById('userInput').addEventListener('keypress', (e) => { if(e.key === 'Enter') askAI(); });
+    </script>
+</body>
+</html>
+
